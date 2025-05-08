@@ -28,4 +28,16 @@ const validator = (
   }
   return errors;
 };
-export { validator };
+
+const validatorLogin = (login: string, pass: string) => {
+  let errors = {};
+  if (!login || login.length == 0) {
+    errors['login'] = 'Заполните поле';
+  }
+  if (!pass || pass.length == 0) {
+    errors['pass'] = 'Заполните поле';
+  }
+
+  return errors;
+};
+export { validator, validatorLogin };

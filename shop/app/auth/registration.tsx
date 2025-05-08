@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { Container, TextField, Typography } from '@mui/material';
 import { validator } from '../../utils/validator';
+import API from '../../utils/API';
+import { router, useNavigation } from 'expo-router';
 const RegistrationContainer = styled(Container)`
   display: flex;
   flex-direction: column;
@@ -45,8 +47,12 @@ const Reg = () => {
   const [pass, setPass] = useState<string>('');
   const [repass, setRepass] = useState<string>('');
   const [avatar, setAvatar] = useState<File | null>();
-  const [errors, setErrors] = useState<object | null>(null);
+  const [errors, setErrors] = useState<object>({});
+  const navigation = useNavigation();
 
+  useEffect(() => {
+    navigation.setOptions({ headerShown: false });
+  }, [navigation]);
   return (
     <>
       <RegistrationContainer>
@@ -167,6 +173,8 @@ const Reg = () => {
         <RegButton
           onClick={(e) => {
             setErrors(validator(name, family, login, pass, repass, avatar));
+            if (Object.keys(errors).length == 0)
+              API.regApi(name, family, login, pass, repass, avatar);
           }}
         >
           <Typography>Зарегистрироваться</Typography>
