@@ -10,6 +10,9 @@ import Avatar from '../../assets/images/avatar.jpg';
 import { observer } from 'mobx-react-lite';
 import Store from '../../utils/stores/Store';
 import API from '../../utils/API';
+import MusicComponent from '../../components/MusicConponent';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { store } from 'expo-router/build/global-state/router-store';
 
 const ProfileContainer = styled(Paper)`
   margin: auto;
@@ -82,6 +85,7 @@ const Profile = observer(() => {
   return (
     <>
       <MenuComponent />
+      {Store.sound ? <MusicComponent/>:""}
       <ProfileContainer>
         <Block>
           <ImageContainer>
@@ -204,6 +208,25 @@ const Profile = observer(() => {
           ) : (
             ''
           )}
+           <ProfileButton
+              onClick={() => {
+                API.changeUser(
+                  Store.user['id'],
+                  name,
+                  family,
+                  login,
+                  date,
+                  file
+                ).then(() => {
+                  AsyncStorage.setItem('token',"")
+                  Store.sound?.track.stopAsync()
+                  Store.setSound(null)
+                  router.push('/')
+                });
+              }}
+            >
+              <Text>Выйти</Text>
+            </ProfileButton>
         </Block>
       </ProfileContainer>
     </>

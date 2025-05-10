@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { Container, TextField, Typography } from '@mui/material';
+import { Alert, Container, TextField, Typography } from '@mui/material';
 import { validatorLogin } from '../../utils/validator';
 import API from '../../utils/API';
 import { router, useNavigation } from 'expo-router';
@@ -9,7 +9,6 @@ const RegistrationContainer = styled(Container)`
   flex-direction: column;
   gap: 20px;
   margin: 20px auto;
-  overflow-y: scroll;
 `;
 const Input = styled(TextField)``;
 const Title = styled(Typography)`
@@ -25,6 +24,7 @@ const RegBlock = styled(Container)`
   padding: 0;
 `;
 const RegButton = styled.div`
+cursor: pointer;
   border-radius: 10px;
   border: 1px solid black;
   padding: 10px 15px;
@@ -41,8 +41,10 @@ const Login = () => {
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
+  const [error, setError]=useState<string | null>(null)
   return (
     <>
+    {error? <Alert severity="error">{error}</Alert>:""}
       <RegistrationContainer>
         <Title>Авторизация</Title>
         <Input
@@ -90,10 +92,17 @@ const Login = () => {
         <RegButton
           onClick={(e) => {
             setErrors(validatorLogin(login, pass));
-            if (Object.keys(errors).length == 0) API.loginApi(login, pass);
+            if (Object.keys(errors).length == 0) API.loginApi(login, pass).then().catch(e=>{setError("Неправильные логин или пароль")});
           }}
         >
           <Typography>Войти</Typography>
+        </RegButton>
+         <RegButton
+          onClick={(e) => {
+            router.push("/auth/registration")
+          }}
+        >
+          <Typography>Перейти в регистрацию</Typography>
         </RegButton>
       </RegistrationContainer>
     </>

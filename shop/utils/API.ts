@@ -13,7 +13,8 @@ class API {
   private uploads: string = '/uploads';
   private weatherHost: string =
     'https://api.openweathermap.org/data/2.5/weather?';
-
+  private CLIENT_ID = 'a2dbbde62935410086a8ad0cf274f032';
+  private CLIENT_SECRET = '4b590046b47c421fbd4cc172ae60d837';
   async regApi(
     name: string,
     family: string,
@@ -28,7 +29,7 @@ class API {
         const response = await axios.post(this.host + this.register, {
           name,
           family,
-          login,
+          email:login,
           password: pass,
         });
         if (response) {
@@ -45,7 +46,7 @@ class API {
     if (Object.keys(res).length == 0) {
       try {
         const response = await axios.post(this.host + this.login, {
-          login,
+          email:login,
           password: pass,
         });
         if (response) {
@@ -64,7 +65,11 @@ class API {
       const res = await axios.get(this.host + this.check, {
         headers: { Authorization: 'Bearer ' + token },
       });
-      if (res) return res.data;
+      if (res) {
+        const ttt={...res.data}
+        ttt['login']=ttt['email']
+        return ttt
+      };
     } catch (error) {
       throw error;
     }
@@ -86,7 +91,7 @@ class API {
         {
           name,
           family,
-          login,
+          email:login,
           date,
           avatar: fileDone,
         },

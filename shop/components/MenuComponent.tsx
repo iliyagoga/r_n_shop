@@ -37,7 +37,20 @@ const MenuComponent = observer(() => {
       >
         Профиль
       </MenuItem>
-      <MenuItem>Музыка</MenuItem>
+      <MenuItem
+        onClick={() => {
+          API.checkUser()
+            .then((res) => {
+              Store.setUser(res);
+              router.push('/music');
+            })
+            .catch(() => {
+              router.push('/auth/login');
+            });
+        }}
+      >
+        Музыка
+      </MenuItem>
       <MenuItem
         onClick={() => {
           API.checkUser()

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { Container, TextField, Typography } from '@mui/material';
+import { Alert, Container, TextField, Typography } from '@mui/material';
 import { validator } from '../../utils/validator';
 import API from '../../utils/API';
 import { router, useNavigation } from 'expo-router';
@@ -33,6 +33,7 @@ const FileInput = styled.input`
   opacity: 0;
 `;
 const RegButton = styled.div`
+cursor: pointer;
   border-radius: 10px;
   border: 1px solid black;
   padding: 10px 15px;
@@ -49,12 +50,13 @@ const Reg = () => {
   const [avatar, setAvatar] = useState<File | null>();
   const [errors, setErrors] = useState<object>({});
   const navigation = useNavigation();
-
+  const [error, setError]=useState<string | null>(null)
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
   return (
     <>
+     {error? <Alert severity="error">{error}</Alert>:""}
       <RegistrationContainer>
         <Title>Регистрация</Title>
         <Input
@@ -174,11 +176,18 @@ const Reg = () => {
           onClick={(e) => {
             setErrors(validator(name, family, login, pass, repass, avatar));
             if (Object.keys(errors).length == 0)
-              API.regApi(name, family, login, pass, repass, avatar);
+              API.regApi(name, family, login, pass, repass, avatar).then().catch(e=>{setError("Такой пользователь уже существует")});
           }}
         >
           <Typography>Зарегистрироваться</Typography>
         </RegButton>
+           <RegButton
+                  onClick={(e) => {
+                    router.push("/auth/login")
+                  }}
+                >
+                  <Typography>Перейти в авторизацию</Typography>
+                </RegButton>
       </RegistrationContainer>
     </>
   );

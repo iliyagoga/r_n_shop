@@ -1,2 +1,1 @@
-declare module 'yandex-music-api';
-
+declare module '*.mp3';

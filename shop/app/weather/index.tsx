@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import API from '../../utils/API';
 import { useNavigation } from 'expo-router';
+import MusicComponent from '../../components/MusicConponent';
+import Store from '../../utils/stores/Store';
 const WeatherContainer = styled(Container)`
   display: flex;
   flex-direction: column;
@@ -31,6 +33,7 @@ const Weather = () => {
   return (
     <>
       <MenuComponent />
+            {Store.sound ? <MusicComponent/>:""}
       <WeatherContainer>
         <Input
           placeholder="Введите город"
