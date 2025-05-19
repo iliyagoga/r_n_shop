@@ -210,19 +210,12 @@ const Profile = observer(() => {
           )}
            <ProfileButton
               onClick={() => {
-                API.changeUser(
-                  Store.user['id'],
-                  name,
-                  family,
-                  login,
-                  date,
-                  file
-                ).then(() => {
+           
                   AsyncStorage.setItem('token',"")
                   Store.sound?.track.stopAsync()
                   Store.setSound(null)
                   router.push('/')
-                });
+              
               }}
             >
               <Text>Выйти</Text>
