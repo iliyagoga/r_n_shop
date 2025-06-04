@@ -11,13 +11,20 @@ import { observer } from 'mobx-react-lite';
 const MusicContainer = styled(Container)`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #ebfff5;
+  height: 100vh;
   gap: 20px;
-  margin-top: 20px;
 `;
 const MusicElement = styled(Card)`
-  padding: 5px 10px;
+  padding: 10px;
+  border-radius: 20px;
+  background: #feffcf;
 `;
-const MusicButton = styled(Button)``;
+const MusicButton = styled(Button)`
+color: black;
+font-weight: 700;`;
 const Block = styled.div`
   display: flex;
   gap: 20px;
@@ -41,8 +48,14 @@ const Music = observer(() => {
   }, []);
 
   return (
-    <>
+    <> <div onClick={()=>{
+       if(Store.sound){
+          Store.sound.track.pauseAsync()
+        }
+    }}>
       <MenuComponent></MenuComponent>
+    </div>
+
       <MusicContainer>
         {list
           ? list.map((e: Mus) => {
@@ -62,19 +75,20 @@ const Music = observer(() => {
                             e.track.playAsync()
                         }
                       
-                    }}>Играть</MusicButton>
+                    }}>Play</MusicButton>
+                       <MusicButton onClick={async()=>{
+                        if(Store.sound){
+                            Store.sound.track.stopAsync()
+                        }
+
+                    }}>Stop</MusicButton>
                     <MusicButton onClick={async()=>{
                         if(Store.sound){
                             Store.sound.track.pauseAsync()
                         }
 
-                    }}>Пауза</MusicButton>
-                    <MusicButton onClick={async()=>{
-                        if(Store.sound){
-                            Store.sound.track.stopAsync()
-                        }
-
-                    }}>Стоп</MusicButton>
+                    }}>Pause</MusicButton>
+                 
                   </Block>
                 </MusicElement>
               );

@@ -7,11 +7,15 @@ import { router, useNavigation } from 'expo-router';
 const RegistrationContainer = styled(Container)`
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  margin: 20px auto;
+  align-items: center;
+  justify-content: center;
+  background: #ebfff5;
+  height: 100vh;
   overflow-y: scroll;
+    gap: 20px;
 `;
-const Input = styled(TextField)``;
+const Input = styled(TextField)`
+width:100%;`;
 const Title = styled(Typography)`
   text-align: center;
   font-size: 1, 5rem;

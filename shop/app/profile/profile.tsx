@@ -15,37 +15,36 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { store } from 'expo-router/build/global-state/router-store';
 
 const ProfileContainer = styled(Paper)`
-  margin: auto;
-  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  background: #ebfff5;
+  height: 100vh;
 `;
 const Block = styled.div`
   display: flex;
-  justify-content: space-between;
-  gap: 20px;
-`;
-const BlockVertical = styled.div`
-  display: flex;
-  flex-wrap: wrap;
   flex-direction: column;
-  align-items: space-between;
   gap: 20px;
+  margin-top: 10px;
+  width: 50%;
 `;
+
 const Text = styled(Typography)`
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 150px;
+  width: 100%;
   color: black;
+
 `;
 const ProfileButton = styled(Button)`
-  border: 1px solid black;
-  border-radius: 10px;
-  padding: 5px 10px;
+  border-radius: 20px;
+  padding: 10px;
   width: 100%;
+  background: lightgreen;
 `;
-const Input = styled(TextField)``;
+const Input = styled(TextField)`
+width: 100%;`;
 const ImageContainer = styled.div`
   position: relative;
 `;
@@ -85,7 +84,6 @@ const Profile = observer(() => {
   return (
     <>
       <MenuComponent />
-      {Store.sound ? <MusicComponent/>:""}
       <ProfileContainer>
         <Block>
           <ImageContainer>
@@ -120,10 +118,15 @@ const Profile = observer(() => {
               ''
             )}
           </ImageContainer>
-
-          <BlockVertical>
+        </Block>
             {redact ? (
               <Block>
+                    <Input
+                value={login}
+                onChange={(e) => {
+                  setLogin(e.target.value);
+                }}
+              />
                 <Input
                   value={name}
                   onChange={(e) => {
@@ -136,34 +139,21 @@ const Profile = observer(() => {
                     setFamily(e.target.value);
                   }}
                 />
-              </Block>
-            ) : (
-              <Text>{Store.user['name'] + ' ' + Store.user['family']}</Text>
-            )}
-
-            {redact ? (
-              <Input
-                value={login}
-                onChange={(e) => {
-                  setLogin(e.target.value);
-                }}
-              />
-            ) : (
-              <Text>@{Store.user['login']}</Text>
-            )}
-            {redact ? (
-              <Input
+                   <Input
                 type="date"
                 value={date}
                 onChange={(e) => {
                   setDate(e.target.value);
                 }}
               />
+              </Block>
             ) : (
-              <Text>{Store.user['date'] ?? 'Укажите дату рождения'}</Text>
+              <Block>
+                <Text>{Store.user['name'] + ' ' + Store.user['family']}</Text>
+                      <Text>@{Store.user['login']}</Text>
+                          <Text>{Store.user['date'] ?? 'Укажите дату рождения'}</Text>
+              </Block>
             )}
-          </BlockVertical>
-        </Block>
         <Block>
           <ProfileButton
             onClick={() => {

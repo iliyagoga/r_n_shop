@@ -7,21 +7,18 @@ import { router, useNavigation } from 'expo-router';
 const RegistrationContainer = styled(Container)`
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  margin: 20px auto;
+  align-items: center;
+  justify-content: center;
+  background: #ebfff5;
+  height: 100vh;
+    gap: 20px;
 `;
-const Input = styled(TextField)``;
+const Input = styled(TextField)`
+width:100%;`;
 const Title = styled(Typography)`
   text-align: center;
   font-size: 1, 5rem;
   font-weight: 700;
-`;
-const RegBlock = styled(Container)`
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  position: relative;
-  padding: 0;
 `;
 const RegButton = styled.div`
 cursor: pointer;

@@ -12,10 +12,9 @@ const Home = observer(() => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
   return (
-    <>
+    <div style={{background:"#ebfff5", height:"100vh"}}>
       <MenuComponent />
-            {Store.sound ? <MusicComponent/>:""}
-    </>
+    </div>
   );
 });
 

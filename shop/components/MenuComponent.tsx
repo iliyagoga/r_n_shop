@@ -13,11 +13,14 @@ const MeanMenu = styled(Paper)`
   justify-content: center;
   gap: 20px;
   flex-direction: row;
+  background: #deffef;
 `;
 const MenuItem = styled(Button)`
-  padding: 2px 0;
+  padding: 10px;
   color: black;
-  border-bottom: 1px solid black;
+  font-size: 15px;
+  font-weight: 700;
+  background: lightgreen;
 `;
 
 const MenuComponent = observer(() => {
