@@ -68,6 +68,20 @@ const MenuComponent = observer(() => {
       >
         Погода
       </MenuItem>
+      <MenuItem
+        onClick={() => {
+          API.checkUser()
+            .then((res) => {
+              Store.setUser(res);
+              router.push('/chat/chat');
+            })
+            .catch(() => {
+              router.push('/auth/login');
+            });
+        }}
+      >
+        Чат
+      </MenuItem>
     </MeanMenu>
   );
 });

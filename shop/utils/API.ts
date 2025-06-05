@@ -15,6 +15,8 @@ class API {
     'https://api.openweathermap.org/data/2.5/weather?';
   private CLIENT_ID = 'a2dbbde62935410086a8ad0cf274f032';
   private CLIENT_SECRET = '4b590046b47c421fbd4cc172ae60d837';
+  private chat: string = '/chats';
+  private messages: string = '/messages';
   async regApi(
     name: string,
     family: string,
@@ -70,6 +72,14 @@ class API {
         ttt['login']=ttt['email']
         return ttt
       };
+    } catch (error) {
+      throw error;
+    }
+  }
+  async getUsers() {
+    try {
+      const res = await axios.get(this.host + this.users);
+      if (res) return res.data;
     } catch (error) {
       throw error;
     }
@@ -131,6 +141,53 @@ class API {
           city +
           '&appid=7d96008c965e4be727520a3b86d076b8&units=metric&lang=ru'
       );
+      if (res) return res.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async getChats(userId: string) {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const res = await axios.get(this.host + this.chat + '?user_id=' + userId,{
+        headers: { Authorization: 'Bearer ' + token },
+      });
+      console.log(res.data);
+      for (const chat of res.data) {
+        const messages = await axios.get(this.host + this.messages + '?chat_id=' + chat.id +'&sortBy=-id',{
+          headers: { Authorization: 'Bearer ' + token },
+        });
+        chat['messages'] = messages.data[0];
+      }
+      if (res) return res.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async sendMessage(chatId: string, text: string) {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const res = await axios.post(this.host + this.messages, {
+        chat_id: chatId,
+        text,
+      }, {
+        headers: { Authorization: 'Bearer ' + token },
+      });
+      if (res) return res.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async createChat(userId: string, user2Id: string) {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const res = await axios.post(this.host + this.chat, {
+        user_id: userId,
+        user2_id: user2Id,
+      }, {
+        headers: { Authorization: 'Bearer ' + token },
+      });
+      
       if (res) return res.data;
     } catch (error) {
       throw error;
