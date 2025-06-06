@@ -18,36 +18,59 @@ const ProfileContainer = styled(Paper)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  background: #ebfff5;
+  background: #fff;
   height: 100vh;
+  padding: 0 15px;
 `;
+
 const Block = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  margin-top: 10px;
-  width: 50%;
+  gap: 16px;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 450px;
+  padding: 0 16px;
 `;
 
 const Text = styled(Typography)`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 100%;
-  color: black;
+  color: #000;
+  font-size: 14px;
+`;
 
+const ProfileHeader = styled(Text)`
+  font-size: 16px;
+  font-weight: 500;
 `;
+
 const ProfileButton = styled(Button)`
-  border-radius: 20px;
-  padding: 10px;
+  padding: 12px;
   width: 100%;
-  background: lightgreen;
+  background: #517da2;
+  color: white;
+  text-transform: none;
+  border-radius: 8px;
+  
+  &:hover {
+    background: #426c91;
+  }
 `;
+
 const Input = styled(TextField)`
-width: 100%;`;
+  width: 100%;
+  
+  .MuiOutlinedInput-root {
+    border-radius: 8px;
+    background: #f5f5f5;
+  }
+`;
+
 const ImageContainer = styled.div`
   position: relative;
+  margin-top: 32px;
 `;
+
+
 const ImageLoad = styled.input`
   position: absolute;
   top: 0;
@@ -55,7 +78,9 @@ const ImageLoad = styled.input`
   right: 0;
   bottom: 0;
   opacity: 0;
+  cursor: pointer;
 `;
+
 const Profile = observer(() => {
   const navigation = useNavigation();
   const [isReady, setIsReady] = useState<boolean>(false);
@@ -66,6 +91,7 @@ const Profile = observer(() => {
   const [avatar, setAvatar] = useState<any>('');
   const [file, setFile] = useState<File | null>(null);
   const [date, setDate] = useState<string>('');
+
   useEffect(() => {
     setIsReady(true);
   }, []);
@@ -77,6 +103,7 @@ const Profile = observer(() => {
       }
     }
   }, [isReady]);
+
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
@@ -85,75 +112,74 @@ const Profile = observer(() => {
     <>
       <MenuComponent />
       <ProfileContainer>
-        <Block>
-          <ImageContainer>
-            <Image.Image
-              source={
-                avatar && avatar.length > 0
-                  ? avatar
-                  : Store.user['avatar']
-                    ? Store.user['avatar']
-                    : Avatar
-              }
-              style={{ width: 100, height: 100 }}
+        <ImageContainer>
+          <Image.Image
+            style={{width: 120, height: 120, borderRadius: 60}}
+            source={
+              avatar && avatar.length > 0
+                ? avatar
+                : Store.user['avatar']
+                  ? Store.user['avatar']
+                  : Avatar
+            }
+          />
+          {redact && (
+            <ImageLoad
+              accept=".jpg,.png"
+              onChange={(e) => {
+                if (e.target.files) {
+                  const reader = new FileReader();
+                  reader.onload = function (event) {
+                    setAvatar(event.target ? event.target.result : '');
+                  };
+                  reader.readAsDataURL(e.target.files[0]);
+                  setFile(e.target.files[0]);
+                }
+              }}
+              type="file"
             />
-            {redact ? (
-              <ImageLoad
-                accept=".jpg,.png"
-                onChange={(e) => {
-                  if (e.target.files) {
-                    const reader = new FileReader();
+          )}
+        </ImageContainer>
 
-                    reader.onload = function (event) {
-                      setAvatar(event.target ? event.target.result : '');
-                    };
+        {redact ? (
+          <Block>
+            <Input
+              placeholder="Логин"
+              value={login}
+              onChange={(e) => {
+                setLogin(e.target.value);
+              }}
+            />
+            <Input
+              placeholder="Имя"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+            />
+            <Input
+              placeholder="Фамилия"
+              value={family}
+              onChange={(e) => {
+                setFamily(e.target.value);
+              }}
+            />
+            <Input
+              type="date"
+              value={date}
+              onChange={(e) => {
+                setDate(e.target.value);
+              }}
+            />
+          </Block>
+        ) : (
+          <Block>
+            <ProfileHeader>{Store.user['name'] + ' ' + Store.user['family']}</ProfileHeader>
+            <Text style={{color: '#517da2'}}>@{Store.user['login']}</Text>
+            <Text style={{color: '#666'}}>{Store.user['date'] ?? 'Укажите дату рождения'}</Text>
+          </Block>
+        )}
 
-                    reader.readAsDataURL(e.target.files[0]);
-                    setFile(e.target.files[0]);
-                  }
-                }}
-                type="file"
-              />
-            ) : (
-              ''
-            )}
-          </ImageContainer>
-        </Block>
-            {redact ? (
-              <Block>
-                    <Input
-                value={login}
-                onChange={(e) => {
-                  setLogin(e.target.value);
-                }}
-              />
-                <Input
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                  }}
-                />
-                <Input
-                  value={family}
-                  onChange={(e) => {
-                    setFamily(e.target.value);
-                  }}
-                />
-                   <Input
-                type="date"
-                value={date}
-                onChange={(e) => {
-                  setDate(e.target.value);
-                }}
-              />
-              </Block>
-            ) : (
-              <Block>
-                <Text>{Store.user['name'] + ' ' + Store.user['family']}</Text>
-                      <Text>@{Store.user['login']}</Text>
-                          <Text>{Store.user['date'] ?? 'Укажите дату рождения'}</Text>
-              </Block>
-            )}
         <Block>
           <ProfileButton
             onClick={() => {
@@ -173,9 +199,10 @@ const Profile = observer(() => {
               setRedact(!redact);
             }}
           >
-            <Text>{!redact ? 'Редактировать' : 'Отмена'}</Text>
+            {!redact ? 'Редактировать' : 'Отмена'}
           </ProfileButton>
-          {redact ? (
+
+          {redact && (
             <ProfileButton
               onClick={() => {
                 API.changeUser(
@@ -193,26 +220,25 @@ const Profile = observer(() => {
                 });
               }}
             >
-              <Text>Сохранить</Text>
+              Сохранить
             </ProfileButton>
-          ) : (
-            ''
           )}
-           <ProfileButton
-              onClick={() => {
-           
-                  AsyncStorage.setItem('token',"")
-                  Store.sound?.track.stopAsync()
-                  Store.setSound(null)
-                  router.push('/')
-              
-              }}
-            >
-              <Text>Выйти</Text>
-            </ProfileButton>
+
+          <ProfileButton
+            onClick={() => {
+              AsyncStorage.setItem('token', "")
+              Store.sound?.track.stopAsync()
+              Store.setSound(null)
+              router.push('/')
+            }}
+            style={{background: '#dc3545'}}
+          >
+            Выйти
+          </ProfileButton>
         </Block>
       </ProfileContainer>
     </>
   );
 });
+
 export default Profile;

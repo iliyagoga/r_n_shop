@@ -4,31 +4,53 @@ import { Alert, Container, TextField, Typography } from '@mui/material';
 import { validatorLogin } from '../../utils/validator';
 import API from '../../utils/API';
 import { router, useNavigation } from 'expo-router';
+
 const RegistrationContainer = styled(Container)`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #ebfff5;
+  background: #fff;
   height: 100vh;
-    gap: 20px;
+  gap: 20px;
+  padding: 20px;
 `;
+
 const Input = styled(TextField)`
-width:100%;`;
+  width: 100%;
+  max-width: 450px;
+  
+  .MuiOutlinedInput-root {
+    border-radius: 8px;
+    background: #f5f5f5;
+  }
+`;
+
 const Title = styled(Typography)`
   text-align: center;
-  font-size: 1, 5rem;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 500;
+  color: #000;
+  margin-bottom: 20px;
 `;
+
 const RegButton = styled.div`
-cursor: pointer;
-  border-radius: 10px;
-  border: 1px solid black;
-  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 12px 16px;
   width: 100%;
+  max-width: 450px;
   box-sizing: border-box;
   text-align: center;
+  background: #517da2;
+  color: white;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #426c91;
+  }
 `;
+
 const Login = () => {
   const [login, setLogin] = useState<string>('');
   const [pass, setPass] = useState<string>('');
@@ -67,7 +89,7 @@ const Login = () => {
         <Input
           error={errors && errors['pass'] ? true : false}
           helperText={errors && errors['pass'] ? errors['pass'] : ''}
-          placeholder="Пароль"
+          placeholder="Пароль" 
           style={errors && errors['pass'] && { color: 'rgb(211, 47, 47)' }}
           required
           sx={
@@ -92,14 +114,15 @@ const Login = () => {
             if (Object.keys(errors).length == 0) API.loginApi(login, pass).then().catch(e=>{setError("Неправильные логин или пароль")});
           }}
         >
-          <Typography>Войти</Typography>
+          <Typography style={{color: 'white'}}>Войти</Typography>
         </RegButton>
          <RegButton
           onClick={(e) => {
             router.push("/auth/registration")
           }}
+          style={{background: '#f5f5f5', color: '#517da2'}}
         >
-          <Typography>Перейти в регистрацию</Typography>
+          <Typography style={{color: '#517da2'}}>Перейти в регистрацию</Typography>
         </RegButton>
       </RegistrationContainer>
     </>

@@ -149,22 +149,42 @@ class API {
   async getChats(userId: string) {
     try {
       const token = await AsyncStorage.getItem('token');
-      const res = await axios.get(this.host + this.chat + '?user_id=' + userId,{
+      const res = await axios.get(this.host + this.chat,{
         headers: { Authorization: 'Bearer ' + token },
       });
-      console.log(res.data);
+      res.data=res.data.filter((chat:any)=>chat.user_id==userId || chat.user2_id==userId);
       for (const chat of res.data) {
         const messages = await axios.get(this.host + this.messages + '?chat_id=' + chat.id +'&sortBy=-id',{
           headers: { Authorization: 'Bearer ' + token },
         });
         chat['messages'] = messages.data[0];
+        const user = await axios.get(this.host + this.users + '/' + chat.user2_id,{
+          headers: { Authorization: 'Bearer ' + token },
+        });
+        chat['user'] = user.data;
       }
+      
       if (res) return res.data;
     } catch (error) {
       throw error;
     }
   }
-  async sendMessage(chatId: string, text: string) {
+  async getChat(chatId: string |string[],userId: string) {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const res = await axios.get(this.host + this.chat + '/' + chatId,{
+        headers: { Authorization: 'Bearer ' + token },
+      });
+      const user = await axios.get(this.host + this.users + '/' + (userId!==res.data.user2_id ? res.data.user2_id : res.data.user_id),{
+        headers: { Authorization: 'Bearer ' + token },
+      });
+      res.data['user'] = user.data;
+      if (res) return res.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async sendMessage(chatId: string |string[], text: string) {
     try {
       const token = await AsyncStorage.getItem('token');
       const res = await axios.post(this.host + this.messages, {
@@ -188,6 +208,17 @@ class API {
         headers: { Authorization: 'Bearer ' + token },
       });
       
+      if (res) return res.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async getMessages(chatId: string |string[]) {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const res = await axios.get(this.host + this.messages + '?chat_id=' + chatId,{
+        headers: { Authorization: 'Bearer ' + token },
+      });
       if (res) return res.data;
     } catch (error) {
       throw error;

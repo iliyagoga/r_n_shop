@@ -7,20 +7,30 @@ import { router } from 'expo-router';
 import API from '../utils/API';
 import { observer } from 'mobx-react-lite';
 import Store from '../utils/stores/Store';
+
 const MeanMenu = styled(Paper)`
-  padding: 20px 0;
+  padding: 12px 0;
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 16px;
   flex-direction: row;
-  background: #deffef;
+  background: #517da2;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 `;
+
 const MenuItem = styled(Button)`
-  padding: 10px;
-  color: black;
-  font-size: 15px;
-  font-weight: 700;
-  background: lightgreen;
+  padding: 8px 16px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: none;
+  background: transparent;
+  border-radius: 8px;
+  transition: background 0.2s;
+
+  &:hover {
+    background: rgba(255,255,255,0.1);
+  }
 `;
 
 const MenuComponent = observer(() => {
@@ -73,7 +83,7 @@ const MenuComponent = observer(() => {
           API.checkUser()
             .then((res) => {
               Store.setUser(res);
-              router.push('/chat/chat');
+              router.push('/chats');
             })
             .catch(() => {
               router.push('/auth/login');

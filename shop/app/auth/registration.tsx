@@ -4,30 +4,46 @@ import { Alert, Container, TextField, Typography } from '@mui/material';
 import { validator } from '../../utils/validator';
 import API from '../../utils/API';
 import { router, useNavigation } from 'expo-router';
+
 const RegistrationContainer = styled(Container)`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #ebfff5;
+  background: #fff;
   height: 100vh;
-  overflow-y: scroll;
-    gap: 20px;
+  gap: 20px;
+  padding: 20px;
 `;
+
 const Input = styled(TextField)`
-width:100%;`;
+  width: 100%;
+  max-width: 450px;
+  
+  .MuiOutlinedInput-root {
+    border-radius: 8px;
+    background: #f5f5f5;
+  }
+`;
+
 const Title = styled(Typography)`
   text-align: center;
-  font-size: 1, 5rem;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 500;
+  color: #000;
+  margin-bottom: 20px;
 `;
+
 const RegBlock = styled(Container)`
   display: flex;
   flex-direction: row;
-  gap: 20px;
+  gap: 12px;
   position: relative;
   padding: 0;
+  width: 100%;
+  max-width: 450px;
 `;
+
 const FileInput = styled.input`
   position: absolute;
   left: 0;
@@ -35,16 +51,26 @@ const FileInput = styled.input`
   top: 0;
   bottom: 0;
   opacity: 0;
+  cursor: pointer;
 `;
+
 const RegButton = styled.div`
-cursor: pointer;
-  border-radius: 10px;
-  border: 1px solid black;
-  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 12px 16px;
   width: 100%;
+  max-width: 450px;
   box-sizing: border-box;
   text-align: center;
+  background: #517da2;
+  color: white;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #426c91;
+  }
 `;
+
 const Reg = () => {
   const [name, setName] = useState<string>('');
   const [family, setFamily] = useState<string>('');
@@ -55,12 +81,14 @@ const Reg = () => {
   const [errors, setErrors] = useState<object>({});
   const navigation = useNavigation();
   const [error, setError]=useState<string | null>(null)
+
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
+
   return (
     <>
-     {error? <Alert severity="error">{error}</Alert>:""}
+      {error? <Alert severity="error">{error}</Alert>:""}
       <RegistrationContainer>
         <Title>Регистрация</Title>
         <Input
@@ -167,7 +195,7 @@ const Reg = () => {
         />
         <RegBlock>
           <RegButton>
-            <Typography>Загрузить аватар</Typography>
+            <Typography style={{color: 'white'}}>Загрузить аватар</Typography>
           </RegButton>
           <FileInput
             type="file"
@@ -183,15 +211,15 @@ const Reg = () => {
               API.regApi(name, family, login, pass, repass, avatar).then().catch(e=>{setError("Такой пользователь уже существует")});
           }}
         >
-          <Typography>Зарегистрироваться</Typography>
+          <Typography style={{color: 'white'}}>Зарегистрироваться</Typography>
         </RegButton>
-           <RegButton
-                  onClick={(e) => {
-                    router.push("/auth/login")
-                  }}
-                >
-                  <Typography>Перейти в авторизацию</Typography>
-                </RegButton>
+        <RegButton
+          onClick={(e) => {
+            router.push("/auth/login")
+          }}
+        >
+          <Typography style={{color: 'white'}}>Перейти в авторизацию</Typography>
+        </RegButton>
       </RegistrationContainer>
     </>
   );
