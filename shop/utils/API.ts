@@ -73,7 +73,7 @@ class API {
         return ttt
       };
     } catch (error) {
-      throw error;
+      return {}
     }
   }
   async getUsers() {
@@ -166,7 +166,7 @@ class API {
       
       if (res) return res.data;
     } catch (error) {
-      throw error;
+      return []
     }
   }
   async getChat(chatId: string |string[],userId: string) {
@@ -181,7 +181,7 @@ class API {
       res.data['user'] = user.data;
       if (res) return res.data;
     } catch (error) {
-      throw error;
+      return {}
     }
   }
   async sendMessage(chatId: string |string[], text: string) {
@@ -195,7 +195,7 @@ class API {
       });
       if (res) return res.data;
     } catch (error) {
-      throw error;
+      return []
     }
   }
   async createChat(userId: string, user2Id: string) {
@@ -210,7 +210,7 @@ class API {
       
       if (res) return res.data;
     } catch (error) {
-      throw error;
+      return {}
     }
   }
   async getMessages(chatId: string |string[]) {
@@ -221,7 +221,7 @@ class API {
       });
       if (res) return res.data;
     } catch (error) {
-      throw error;
+      return []
     }
   }
 }
