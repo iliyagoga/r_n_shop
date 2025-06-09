@@ -226,11 +226,10 @@ const Chats = observer(() => {
             </ChatMessage>
           ))}
 
-          {chats.length === 0 && (
             <>
-              <Typography variant="h6" align="center" style={{margin: '20px 0'}}>
+             {chats.length === 0 && <Typography variant="h6" align="center" style={{margin: '20px 0'}}>
                 Нет сообщений
-              </Typography>
+              </Typography>}
               <ChatButton 
                 fullWidth
                 onClick={()=>{
@@ -243,7 +242,7 @@ const Chats = observer(() => {
                 Создать чат
               </ChatButton>
             </>
-          )}
+          
         </ChatContainer>
         </>
     )

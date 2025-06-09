@@ -103,7 +103,7 @@ const Music = observer(() => {
                 <Block>
                   <MusicButton
                     onClick={async () => {
-                      if (Store.sound && Store.sound == e) {
+                      if (Store.sound && Store.sound.name == e.name) {
                         Store.sound.track.playAsync()
                       } else {
                         if (Store.sound) {
