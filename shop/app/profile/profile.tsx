@@ -103,7 +103,6 @@ const Profile = observer(() => {
       }
     }
   }, [isReady]);
-
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
@@ -213,10 +212,8 @@ const Profile = observer(() => {
                   date,
                   file
                 ).then(() => {
-                  API.checkUser().then((r) => {
-                    Store.setUser(r);
-                    setRedact(false);
-                  });
+                  AsyncStorage.setItem('token', "")
+                 router.push('/auth/login')
                 });
               }}
             >
