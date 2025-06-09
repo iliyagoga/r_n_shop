@@ -136,6 +136,7 @@ const Chats = observer(() => {
       const interval = setInterval(()=>{
         API.getChats(Store.user['id']).then((res) => {
           setChats(res)
+          console.log(res,Store.user['id'])
         })
       },1000)
       return ()=>{
@@ -192,7 +193,7 @@ const Chats = observer(() => {
                               onClick={()=>{
                                 if(message.length > 0){
                                   API.createChat(Store.user['id'], user.id).then((res) => {
-                                    API.sendMessage(res.id, message).then((res) => {
+                                    API.sendMessage(res.id, message, Store.user['id'], user.id).then((res) => {
                                       setMessage('');
                                       setCreateChat(false);
                                     })
@@ -212,7 +213,7 @@ const Chats = observer(() => {
             </ChatModal>
           )}
 
-          {chats.map((chat) => (
+          {chats.length > 0 && chats.map((chat) => (
             <ChatMessage key={chat.id} onClick={()=>{
               router.push('/chat/'+chat.id);
             }}>

@@ -143,9 +143,9 @@ const Chat = observer(() => {
         {messages.map((message) => (
           <ChatMessage 
             key={message.id} 
-            isSelf={message.user_id === Store.user['id']}
+            isSelf={message.user1_id === Store.user['id']}
             style={{
-              marginLeft: message.user_id === Store.user['id'] ? 'auto' : '0'
+              marginLeft: message.user1_id === Store.user['id'] ? 'auto' : '0'
             }}
           >
             <Typography style={{fontSize: '14px'}}>{message.text}</Typography>
@@ -166,7 +166,7 @@ const Chat = observer(() => {
         <ChatButton 
           onClick={()=>{
             if (message.trim()) {
-              API.sendMessage(id, message).then((res) => {
+              API.sendMessage(id, message, Store.user['id'], chat?.user.id).then((res) => {
                 setMessages([...messages, res]);
                 setMessage('');
               });

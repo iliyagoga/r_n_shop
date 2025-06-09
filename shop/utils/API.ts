@@ -73,7 +73,7 @@ class API {
         return ttt
       };
     } catch (error) {
-      return {}
+      throw error;
     }
   }
   async getUsers() {
@@ -152,7 +152,7 @@ class API {
       const res = await axios.get(this.host + this.chat,{
         headers: { Authorization: 'Bearer ' + token },
       });
-      res.data=res.data.filter((chat:any)=>chat.user_id==userId || chat.user2_id==userId);
+      res.data=res.data.filter((chat:any)=>chat.user1_id==userId || chat.user2_id==userId);
       for (const chat of res.data) {
         const messages = await axios.get(this.host + this.messages + '?chat_id=' + chat.id +'&sortBy=-id',{
           headers: { Authorization: 'Bearer ' + token },
@@ -175,7 +175,7 @@ class API {
       const res = await axios.get(this.host + this.chat + '/' + chatId,{
         headers: { Authorization: 'Bearer ' + token },
       });
-      const user = await axios.get(this.host + this.users + '/' + (userId!==res.data.user2_id ? res.data.user2_id : res.data.user_id),{
+      const user = await axios.get(this.host + this.users + '/' + (userId!==res.data.user2_id ? res.data.user2_id : res.data.user1_id),{
         headers: { Authorization: 'Bearer ' + token },
       });
       res.data['user'] = user.data;
@@ -184,12 +184,14 @@ class API {
       return {}
     }
   }
-  async sendMessage(chatId: string |string[], text: string) {
+  async sendMessage(chatId: string |string[], text: string, user1_id: string, user2_id: string) {
     try {
       const token = await AsyncStorage.getItem('token');
       const res = await axios.post(this.host + this.messages, {
         chat_id: chatId,
         text,
+        user1_id,
+        user2_id,
       }, {
         headers: { Authorization: 'Bearer ' + token },
       });
@@ -202,12 +204,11 @@ class API {
     try {
       const token = await AsyncStorage.getItem('token');
       const res = await axios.post(this.host + this.chat, {
-        user_id: userId,
+        user1_id: userId,
         user2_id: user2Id,
       }, {
         headers: { Authorization: 'Bearer ' + token },
       });
-      
       if (res) return res.data;
     } catch (error) {
       return {}
