@@ -136,7 +136,6 @@ const Chats = observer(() => {
       const interval = setInterval(()=>{
         API.getChats(Store.user['id']).then((res) => {
           setChats(res)
-          console.log(res,Store.user['id'])
         })
       },1000)
       return ()=>{
