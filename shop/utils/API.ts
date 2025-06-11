@@ -53,7 +53,7 @@ class API {
         });
         if (response) {
           AsyncStorage.setItem('token', response.data.token);
-          router.push('/');
+          return response.data;
         }
       } catch (error) {
         throw error;
@@ -109,7 +109,8 @@ class API {
           headers: { Authorization: 'Bearer ' + token },
         }
       );
-      if (res) return res;
+     const user =  await this.loginApi(res.data.email,res.data.password);
+      if (user) return user.data;
     } catch (error) {
       throw error;
     }

@@ -212,8 +212,10 @@ const Profile = observer(() => {
                   date,
                   file
                 ).then(() => {
-                  AsyncStorage.setItem('token', "")
-                 router.push('/auth/login')
+                 API.checkUser().then((r) => {
+                    Store.setUser(r);
+                    setRedact(false);
+                  });
                 });
               }}
             >

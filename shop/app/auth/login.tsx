@@ -111,7 +111,7 @@ const Login = () => {
         <RegButton
           onClick={(e) => {
             setErrors(validatorLogin(login, pass));
-            if (Object.keys(errors).length == 0) API.loginApi(login, pass).then().catch(e=>{setError("Неправильные логин или пароль")});
+            if (Object.keys(errors).length == 0) API.loginApi(login, pass).then(()=>router.push("/")).catch(e=>{setError("Неправильные логин или пароль")});
           }}
         >
           <Typography style={{color: 'white'}}>Войти</Typography>
